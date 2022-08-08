@@ -33,8 +33,8 @@ int dequeue(data_t *deq_data)
     if(queue_num > 0){
         printf("dequeue %d\n",data.queue_data[queue_head]);
         deq_data = data.queue_data[queue_head];
-        queue_num --;
-        queue_head ++;
+        queue_head++;
+        queue_num--;
         return SUCCESS;
     }else{
         return FAILURE;
@@ -45,12 +45,8 @@ void queuePrint()
 {
     int i;
     printf("queue[");
-    for(i = queue_head; i < QUEUE_SIZE; i++){
-        if(i != queue_num){
-            printf("%3d", data.queue_data[i]);  
-            }else{
-            break;
-        }
+    for(i = queue_head; i < (queue_head + queue_num); i++){
+            printf("%3d",data.queue_data[i]);   
     }
     printf("]\n");
 }
@@ -80,7 +76,8 @@ int main(){
         printf("enqueue = 0, dequeue = 1, peek = 2, size = 3, end = -1\n");
         scanf("%d",&hantei);
 
-        if(hantei == 0){
+        switch(hantei){
+        case ENQ:
             for(;;)
             {
                 printf("enqueue number:");
@@ -95,23 +92,25 @@ int main(){
                     queuePrint();
                 }
             }
-        }
+        break;
+        
 
-        if(hantei == 1){
+        case DEQ:
             dequeue(&hikisuu);
             queuePrint();
-        }
+            break;
 
-        if(hantei == 2){
+        case PEEK:
             peek(&hikisuu);
-        }
+            break;
         
-        if(hantei == 3){
+        case SIZE:
             size(&hikisuu);
-        }
+            break;
 
-        if(hantei == -1){
+        case END:
             return 0;
+            break;
         }
     }
 }
