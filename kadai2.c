@@ -1,6 +1,6 @@
 #include<stdio.h>
 
-#define QUEUE_SIZE  200   /* キューに積むことのできるデータの最大個数 */
+#define QUEUESIZE   5   /* キューに積むことのできるデータの最大個数 */
 #define SUCCESS     1     /* 成功 */
 #define FAILURE     0     /* 失敗 */
 #define ENQ  0
@@ -10,33 +10,41 @@
 #define END  -1
 
 
-typedef struct{
-    int queue_data[QUEUE_SIZE];
+typedef struct
+{
+    int queue_data[QUEUESIZE];
+    int queue_num;
+    int queue_head;
 }data_t;
 
-int queue_num, queue_head;
 data_t data;
 
-int enqueue(enq_data)
+int enqueue(int enq_data)
 {
-    if(queue_head + queue_num < QUEUE_SIZE){
-    data.queue_data[queue_head + queue_num] = enq_data;
-    queue_num ++;
+    int InputNum = (data.queue_head + data.queue_num) % QUEUESIZE;//リングバッファ
+    if(data.queue_num < QUEUESIZE){  
+    data.queue_data[InputNum] = enq_data;
+    data.queue_num ++;
     return SUCCESS;
     }else{
+        printf("queue data is full\n");
         return FAILURE;
     }
 }
 
-int dequeue(data_t *deq_data)
+int dequeue(int *deq_data)
 {
-    if(queue_num > 0){
-        printf("dequeue %d\n",data.queue_data[queue_head]);
-        deq_data = data.queue_data[queue_head];
-        queue_head++;
-        queue_num--;
+    if(data.queue_num > 0)
+    {
+        int true_queue_head = data.queue_head % QUEUESIZE;//リングバッファ対応用
+        printf("dequeue %d\n",data.queue_data[true_queue_head]);
+        *deq_data = data.queue_data[true_queue_head];
+        data.queue_head++;
+        data.queue_num--;
         return SUCCESS;
-    }else{
+    }
+    else
+    {
         return FAILURE;
     }
 }
@@ -44,68 +52,72 @@ int dequeue(data_t *deq_data)
 void queuePrint()
 {
     int i;
+    int true_queue_head = data.queue_head % QUEUESIZE;//リングバッファ対応用
     printf("queue[");
-    for(i = queue_head; i < (queue_head + queue_num); i++){
-            printf("%3d",data.queue_data[i]);   
+    for(i = 0; i < data.queue_num; i++){
+            printf("%3d",data.queue_data[(i + true_queue_head) % QUEUESIZE]);   
     }
     printf("]\n");
 }
 
-int peek(data_t *peek_data)//peek関数
+int peek()//peek関数
 {
-     if(queue_num > 0){
-        printf("peek %d\n",data.queue_data[queue_head]);
+     if(data.queue_num > 0)
+    {
+        int true_queue_head = data.queue_head % QUEUESIZE;//リングバッファ対応用
+        printf("peek %d\n",data.queue_data[true_queue_head]);
         return SUCCESS;
-    }else{
+    }
+    else
+    {
         return FAILURE;
     }
 }
 
-int size(data_t *size_data)//size関数
+int size()//size関数
 {
-    int queue_data_size = queue_num - queue_head;
-    printf("element count:%d\n", queue_data_size);
+    printf("element count:%d\n", data.queue_num);
 }
 
-int main(){
-    int no,hikisuu,hantei;
-
-    queue_num = 0;
+int main()
+{
+    int input_num,function_call,function_select;
+    data.queue_num = 0;
     for(;;)
     {
         printf("enqueue = 0, dequeue = 1, peek = 2, size = 3, end = -1\n");
-        scanf("%d",&hantei);
+        scanf("%d",&function_select);
 
-        switch(hantei){
+        switch(function_select)
+        {
         case ENQ:
             for(;;)
             {
                 printf("enqueue number:");
-                scanf("%d", &no);
+                scanf("%d", &input_num);
 
-                if(no == -1)
+                if(input_num == -1)
                 {
                     break;
                 }else{
-                    enqueue(no);
-                    printf("enqueue %d\n", no);
+                    enqueue(input_num);
+                    printf("enqueue %d\n", input_num);
                     queuePrint();
                 }
             }
         break;
-        
 
         case DEQ:
-            dequeue(&hikisuu);
+            dequeue(&function_call);
             queuePrint();
             break;
 
         case PEEK:
-            peek(&hikisuu);
+            peek();
             break;
         
         case SIZE:
-            size(&hikisuu);
+            size();
             break;
 
         case END:
