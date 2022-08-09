@@ -11,32 +11,34 @@
 
 typedef struct {
     int stack_data[STACK_SIZE];
+    int stack_num;
 }data_t;
 
 
-int stack_num;
 data_t data;
 
-int push(push_data)//push関数
+int push(int push_data)//push関数
 {
-    if (stack_num < STACK_SIZE) {
-        data.stack_data[stack_num] = push_data;
-        stack_num ++;
+    if (data.stack_num < STACK_SIZE) 
+    {
+        data.stack_data[data.stack_num] = push_data;
+        data.stack_num ++;
         return SUCCESS;
     } else {
         return FAILURE;
     }
 }
 
-int pop(data_t *pop_data)//pop関数
+int pop(int *pop_data)//pop関数
 {
-    if(stack_num > 0){
+    if(data.stack_num > 0)
+    {
         int PopNo;
         int *Pop_Data;
-        PopNo = stack_num;
+        PopNo = data.stack_num;
         printf("pop %d\n",data.stack_data[PopNo - 1]);
-        stack_num--;
-        pop_data = data.stack_data[stack_num];
+        data.stack_num--;
+        *pop_data = data.stack_data[data.stack_num];
         return SUCCESS;
     }else{
         return FAILURE;
@@ -48,32 +50,36 @@ void stackPrint()//stackしているデータを表示する関数
     int i;
 
     printf("stack[");
-    for(i = 0;i < stack_num; i++){
+    for(i = 0;i < data.stack_num; i++)
+    {
         printf("%3d", data.stack_data[i]);
     }
     printf("]\n");
 }
 
-int peek(data_t *peek_data)//peek関数
+int peek()//peek関数
 {
-    if(stack_num > 0){
-        printf("peek %d\n", data.stack_data[stack_num - 1]);
+    if(data.stack_num > 0)
+    {
+        printf("peek %d\n", data.stack_data[data.stack_num - 1]);
         return SUCCESS;
-    }else{
+    }
+    else
+    {
         return FAILURE;
     }
 }
 
-int size(data_t *size_data) //size関数
+int size() //size関数
 {
-    printf("element count:%d\n", stack_num);
+    printf("element count:%d\n", data.stack_num);
 }
 
 int main()
 {
-    int kannsuu_yobidasi,hantei;/*iは数字入力用、bは呼び出す関数選ぶ用*/
+    int function_call,hantei;/*iは数字入力用、bは呼び出す関数選ぶ用*/
 
-    stack_num = 0;
+    data.stack_num = 0;
     while(1)
     {
         data_t data;
@@ -82,7 +88,7 @@ int main()
         scanf("%d",&hantei);
 
         switch(hantei){
-        case PUSH:/*push*/
+        case PUSH:
             while(1)
             {
                 int no;//noに数字を入力する
@@ -101,16 +107,16 @@ int main()
         break;  
 
         case POP: /*pop*/
-            pop(&kannsuu_yobidasi);
+            pop(&function_call);
             stackPrint();
             break;
 
         case PEEK://peek
-            peek(kannsuu_yobidasi);
+            peek();
             break;
 
         case SIZE://size
-            size(&kannsuu_yobidasi);
+            size();
             break;
 
         case END://end
