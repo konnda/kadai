@@ -1,6 +1,6 @@
 #include<stdio.h>
 
-#define QUEUESIZE   5   /* キューに積むことのできるデータの最大個数 */
+#define QUEUESIZE   10000   /* キューに積むことのできるデータの最大個数 */
 #define SUCCESS     1     /* 成功 */
 #define FAILURE     0     /* 失敗 */
 #define ENQ  0
