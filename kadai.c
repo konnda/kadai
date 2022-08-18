@@ -1,6 +1,6 @@
 #include<stdio.h>
 
-#define STACK_SIZE  100   /* スタックに積むことのできるデータの最大個数 */
+#define STACK_SIZE  10000   /* スタックに積むことのできるデータの最大個数 */
 #define SUCCESS     1     /* 成功 */
 #define FAILURE     0     /* 失敗 */
 #define PUSH 0
